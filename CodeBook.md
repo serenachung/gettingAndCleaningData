@@ -1,6 +1,6 @@
 # Code Book for run_analysis.R
 Serena Chung  
-`r Sys.Date()`  
+April 22, 2016  
 
 
 
