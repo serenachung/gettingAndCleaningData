@@ -31,8 +31,8 @@ run_analysis.R performs the following steps:
 
 1. Download and unzip the data if necessary.
 
-    * The script first check of the data have already been downloaded, if not the R function `download.file` is used to download the zipped data file and the data file is unzipped.
-    * The unzipped data are in a directory called `UCI HAR Dataset`.  The relevant data file to process by run_analysis.R are:
+    * The script first check of the data have already been downloaded, if not the R function `download.file` is used to download the zipped data file and the data file is unzipped using `unzip`.
+    * The unzipped data are in a directory called `UCI HAR Dataset`.  The relevant data files processed by run_analysis.R are:
     
         File                     | Description
         -------------------------| ------------------------------------------
@@ -61,7 +61,7 @@ run_analysis.R performs the following steps:
         
         ```r
         readHARData <- function(case) {
-            fileName <- paste0(dataDir,"/",case,"/","subject_",case,".txt")
+             fileName <- paste0(dataDir,"/",case,"/","subject_",case,".txt")
              subject.df <- read.table(fileName)
              fileName <- paste0(dataDir,"/",case,"/","y_",case,".txt")
              y.df <- read.table(fileName)
@@ -116,7 +116,7 @@ run_analysis.R performs the following steps:
     names(desiredData.df) <- betterNames
     ```
 
-    `desiredData.df` contains 10299 rows of data with the following 88 columns:
+    `desiredData.df` now contains 10299 rows of data with the following 88 columns:
 
     
     ```
@@ -211,18 +211,18 @@ run_analysis.R performs the following steps:
     ```
 
 
-6. From the dataset in step 5, create a new file called `averagedData.txt.`, which contents independent tidied dataset with the average of each variable for each activity and each subject.
+6. From the dataset in step 5, create a new file called `averagedData.txt`, which contents independent tidied dataset with the average of each variable for each activity and each subject.
 
     The `dplyr` package is used to calcuate the averages for each activity and each subject:
     
     ```r
     library(dplyr)
     averagedData.df <- desiredData.df %>%
-    group_by(subject,activity) %>%
-    summarize_each(funs(mean))
+            group_by(subject,activity) %>%
+            summarize_each(funs(mean))
     ```
 
-    `averagedData.df` contains 180 rows and 88 columns
+    `averagedData.df` contains 180 rows and 88 columns with the same column names as listed above for `desiredData.df`.
     
     The tidied data framed `averagedData.df` is written to file averagedData.txt:
     
