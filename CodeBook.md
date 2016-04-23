@@ -1,6 +1,6 @@
 # Code Book for run_analysis.R
 Serena Chung  
-April 22, 2016  
+April 23, 2016  
 
 
 
@@ -29,9 +29,21 @@ run_analysis.R performs the following steps:
 
 ## R Script Details
 
-1. Download and unzip the data if necessary
-    * The script first check of the data have already been downloaded, if not the R function `download.file` is used to download the zipped data file and the data file is unzipped.
+1. Download and unzip the data if necessary.
 
+    * The script first check of the data have already been downloaded, if not the R function `download.file` is used to download the zipped data file and the data file is unzipped.
+    * The unzipped data are in a directory called `UCI HAR Dataset`.  The relevant data file to process by run_analysis.R are:
+    
+        File                     | Description
+        -------------------------| ------------------------------------------
+        activity_labels.txt      | Links the activity index to activity name
+        features.txt             | List of all features
+        test/X_test.txt          | Test set
+        test/subject_test.txt    | Subject index for the test set
+        test/y_test.txt          | Activity index for the test set
+        train/X_train.txt        | Training set
+        train/subject_train.txt  | Subject index for the training set
+        train/y_train.txt        | Activity index for the training set
 
 2. Merge the training and the test sets to create one dataset.
 
@@ -48,6 +60,17 @@ run_analysis.R performs the following steps:
     * 2.2\. New function `readHARData` is used to read in one set of data ("test"" or "train"") at a time and to store each set of of data in a dataframe. The result is two dataframes, `test.df` and `train.df`:
         
         ```r
+        readHARData <- function(case) {
+            fileName <- paste0(dataDir,"/",case,"/","subject_",case,".txt")
+             subject.df <- read.table(fileName)
+             fileName <- paste0(dataDir,"/",case,"/","y_",case,".txt")
+             y.df <- read.table(fileName)
+             fileName <- paste0(dataDir,"/",case,"/","X_",case,".txt")
+             x.df <- read.table(fileName,col.names=features)
+             data.df <- data.frame(subject=subject.df$V1,activity=y.df$V1,x.df)
+             return(data.df)
+        }
+        
         test.df <- readHARData("test")
         train.df <- readHARData("train")
         ```
